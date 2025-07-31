@@ -1,27 +1,22 @@
 const http = require('http');
 
 const requestListener = (request, response) => {
-    response.setHeader('Content-Type', 'text/html');
-    response.statusCode = 200;
-    
-    const {method} = request;
+    let body = [];
 
-    if(method === 'GET') {
-        response.end('<h1>Hello!</h1>');
-    }
+    request.on('data', (chunk) => {
+        body.push(chunk);
+    });
 
-    if(method === 'POST') {
-        response.end('<h1>Halo!</h1>');
-    }
-
-    if(method === 'PUT') {
-        response.end('<h1>Bonjour!</h1>');
-    }
-    
-    if(method === 'DELETE') {
-        response.end('<h1>Salam!</h1>');
-    }
+    request.on('end', () => {
+        body = Buffer.concat(body).toString();
+        const {name} = JSON.parse(body); // memisahkan data properti name
+        const {another} = JSON.parse(body); // memisahkan data properti another
+        response.end(`<h1>Hi ${name} ${another}</h1>`)
+    });
 };
+
+// curl -X POST -H "Content-Type: application/json" http://localhost:5000 -d "{\"name\": \"Jiansyah\", \"another\": \"Informatika\"}"
+// Output : <h1>Hi Jiansyah Informatika</h1>
 
 const server = http.createServer(requestListener);
 
