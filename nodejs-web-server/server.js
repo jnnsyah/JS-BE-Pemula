@@ -1,18 +1,38 @@
 const http = require('http');
 
 const requestListener = (request, response) => {
-    let body = [];
+    response.setHeader('Content-Type', 'text/html');
+    response.statusCode = 200;
 
-    request.on('data', (chunk) => {
-        body.push(chunk);
-    });
-
-    request.on('end', () => {
-        body = Buffer.concat(body).toString();
-        const {name} = JSON.parse(body); // memisahkan data properti name
-        const {another} = JSON.parse(body); // memisahkan data properti another
-        response.end(`<h1>Hi ${name} ${another}</h1>`)
-    });
+    const { method, url } = request;
+ 
+    if(url === '/') {
+        if(method === 'GET') {
+            response.end('<h1>Ini adalah homepage</h1>');
+        } else {
+            response.end(`<h1>Halaman tidak dapat diakses dengan ${method} request</h1>`);
+        }
+    } else if(url === '/about') {
+        if(method === 'GET') {
+            response.end('<h1>Halo! Ini adalah halaman about</h1>')
+        } else if(method === 'POST') {
+            let body = [];
+    
+            request.on('data', (chunk) => {
+                body.push(chunk);
+            });
+ 
+            request.on('end', () => {
+                body = Buffer.concat(body).toString();
+                const { name } = JSON.parse(body);
+                response.end(`<h1>Halo, ${name}! Ini adalah halaman about</h1>`);
+            });
+        } else {
+            response.end(`<h1>Halaman tidak dapat diakses menggunakan ${method} request</h1>`);
+        }
+    } else {
+        response.end('<h1>Halaman tidak ditemukan!</h1>');
+    }
 };
 
 // curl -X POST -H "Content-Type: application/json" http://localhost:5000 -d "{\"name\": \"Jiansyah\", \"another\": \"Informatika\"}"
