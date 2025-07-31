@@ -1,0 +1,14 @@
+{
+  "name": "nodejs-basic",
+  "version": "1.0.0",
+  "description": "Project node pertama",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo"
+  },
+  "author": "jn",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
