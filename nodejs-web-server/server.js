@@ -10,6 +10,7 @@ const requestListener = (request, response) => {
         if(method === 'GET') {
             response.end('<h1>Ini adalah homepage</h1>');
         } else {
+            response.statusCode = 400;
             response.end(`<h1>Halaman tidak dapat diakses dengan ${method} request</h1>`);
         }
     } else if(url === '/about') {
@@ -28,15 +29,24 @@ const requestListener = (request, response) => {
                 response.end(`<h1>Halo, ${name}! Ini adalah halaman about</h1>`);
             });
         } else {
+            response.statusCode = 400;
             response.end(`<h1>Halaman tidak dapat diakses menggunakan ${method} request</h1>`);
         }
     } else {
+        response.statusCode = 400;
         response.end('<h1>Halaman tidak ditemukan!</h1>');
     }
 };
 
-// curl -X POST -H "Content-Type: application/json" http://localhost:5000 -d "{\"name\": \"Jiansyah\", \"another\": \"Informatika\"}"
-// Output : <h1>Hi Jiansyah Informatika</h1>
+// curl -X PUT http://localhost:5000/about -i
+/* Output :
+HTTP/1.1 400 Bad Request
+Content-Type: text/html
+Date: Thu, 31 Jul 2025 16:44:18 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 60
+*/
 
 const server = http.createServer(requestListener);
 
