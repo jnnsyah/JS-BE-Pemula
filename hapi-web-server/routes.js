@@ -44,6 +44,30 @@ const routes = [
             const {username = "stranger"} = request.params;
             return `Hi, ${username}!`;
         }
+
+        // curl -X GET http://localhost:500/user/Jian
+        // Output : Hi, Nitak!
+    },
+    {
+        // Query Parameters
+        method: 'GET',
+        path: `/hello/{name?}`,
+        handler: (request, h) => {
+            const {name = "stranger"} = request.params;
+            // Menangkap request query 'lang'
+            const {lang} = request.query;
+
+            if(lang === 'id') {
+                return `Hai, ${name}`;
+            }
+
+            return `Hello, ${name}!`;
+        },
+
+        // curl -X GET http://localhost:5000/hello/dicoding?lang=id
+        // output: Hai, dicoding!
+        // curl -X GET http://localhost:5000/hello/dicoding
+        // output: Hello, dicoding!
     }
 ]
 
