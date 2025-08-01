@@ -33,6 +33,17 @@ const routes = [
         handler: (request, h) => {
             return 'Halaman tidak ditemukan';
         },
+    },
+    {
+        // Path Parameters
+        method: 'GET',
+        path: `/user/{username?}`,
+        // tanda tanya (?) mengartikan paramnya opsional
+        handler: (request, h) => {
+            // Memberikan nilai default
+            const {username = "stranger"} = request.params;
+            return `Hi, ${username}!`;
+        }
     }
 ]
 
