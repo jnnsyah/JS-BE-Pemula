@@ -68,6 +68,18 @@ const routes = [
         // output: Hai, dicoding!
         // curl -X GET http://localhost:5000/hello/dicoding
         // output: Hello, dicoding!
+    },
+    {
+        // Body/Payload Request
+        method: 'POST',
+        path: '/login',
+        handler: (request, h) => {
+            const { username, password } = request.payload;
+            return `Welcome ${username}`;
+        },
+
+        // curl -X POST -H "Content-Type: application/json" http://localhost:5000/login -d "{\"username\": \"Rama Jiansyah\", \"password\": \"123\"}"
+        // Output: Welcome Rama Jiansyah
     }
 ]
 
