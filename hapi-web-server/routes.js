@@ -75,11 +75,23 @@ const routes = [
         path: '/login',
         handler: (request, h) => {
             const { username, password } = request.payload;
-            return `Welcome ${username}`;
+            return h.response(`Welcome ${username}`)
+                .type('text/plain')
+                .header('Flag', 'This is the flag');
         },
 
-        // curl -X POST -H "Content-Type: application/json" http://localhost:5000/login -d "{\"username\": \"Rama Jiansyah\", \"password\": \"123\"}"
-        // Output: Welcome Rama Jiansyah
+        // curl -X POST -H "Content-Type: application/json" http://localhost:5000/login -d "{\"username\": \"Rama Jiansyah\", \"password\": \"123\"}" -i
+        /* Output :
+        HTTP/1.1 200 OK
+        content-type: text/html; charset=utf-8
+        cache-control: no-cache
+        content-length: 21
+        Date: Fri, 01 Aug 2025 06:12:43 GMT
+        Connection: keep-alive
+        Keep-Alive: timeout=5
+
+        Welcome Rama Jiansyah
+        */
     }
 ]
 
