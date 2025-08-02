@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 const { nanoid } = require('nanoid');
 const notes = require('./notes');
 
+// Handler untuk menambahkan notes
 const addNoteHandler = (request, h) => {
   const { title, tags, body } = request.payload;
   const id = nanoid(16);
@@ -35,4 +37,34 @@ const addNoteHandler = (request, h) => {
   return response;
 };
 
-module.exports = { addNoteHandler };
+// Handler untuk lihat semua note
+const getAllNotesHandler = () => ({
+  status: 'success',
+  data: {
+    notes,
+  },
+});
+
+// Handler menampilkan detail note
+const getNodeByIdHandler = (request, h) => {
+  const { id } = request.params;
+  const note = notes.filter((n) => n.id === id)[0];
+
+  if (note !== undefined) {
+    return {
+      status: 'success',
+      data: {
+        note,
+      },
+    };
+  }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'Catatan tidak ditemukan',
+  });
+  response.code(404);
+  return response;
+};
+
+module.exports = { addNoteHandler, getAllNotesHandler, getNodeByIdHandler };
