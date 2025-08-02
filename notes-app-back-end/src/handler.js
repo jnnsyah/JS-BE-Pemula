@@ -67,4 +67,53 @@ const getNodeByIdHandler = (request, h) => {
   return response;
 };
 
-module.exports = { addNoteHandler, getAllNotesHandler, getNodeByIdHandler };
+// Handler update
+const editNoteByIdHandler = (request, h) => {
+  const { id } = request.params;
+  const { title, tags, body } = request.payload;
+  const updateAt = new Date().toISOString();
+
+  const index = notes.findIndex((note) => note.id === id);
+
+  if (index === -1) {
+    return h.response({
+      status: 'fail',
+      message: 'Gagal memperbaharui catatan. Id tidak ditemukan',
+    }).code(404);
+  }
+
+  notes[index] = {
+    ...notes[index],
+    title: title ?? notes[index].title,
+    tags: tags ?? notes[index].tags,
+    body: body ?? notes[index].body,
+    updateAt,
+  };
+
+  return h.response({
+    status: 'success',
+    message: 'Catatan berhasil diperbaharui',
+  }).code(200);
+};
+
+// Handler Delete note
+const deleteNoteByIdHandler = (request, h) => {
+  const { id } = request.params;
+  const index = notes.findIndex((note) => note.id === id);
+
+  if (index === -1) {
+    return h.response({
+      status: 'fail',
+      message: 'Gagal menghapus note. Id tidak ditemukan',
+    }).code(404);
+  }
+
+  notes.splice(index, 1);
+
+  return h.response({
+    status: 'success',
+    message: 'Catatan berhasil dihapus',
+  }).code(200);
+};
+
+module.exports = { addNoteHandler, getAllNotesHandler, getNodeByIdHandler, editNoteByIdHandler, deleteNoteByIdHandler };
